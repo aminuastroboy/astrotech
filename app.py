@@ -1,9 +1,8 @@
 import streamlit as st
-from datetime import datetime
 
-# ------------------------------------------------
-# PAGE CONFIG
-# ------------------------------------------------
+# ---------------------------
+# Page Config
+# ---------------------------
 st.set_page_config(
     page_title="ASTROTECH",
     page_icon="🚀",
@@ -11,22 +10,48 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# ------------------------------------------------
-# CUSTOM CSS FOR STYLING + MOBILE RESPONSIVENESS
-# ------------------------------------------------
+# ---------------------------
+# Custom CSS
+# ---------------------------
 st.markdown("""
 <style>
-/* General cosmic background */
+/* Global page styling */
 .stApp {
     background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
     color: white;
     font-family: 'Trebuchet MS', sans-serif;
 }
 
-/* Prevent horizontal scroll */
-body, .main, .block-container {
-    max-width: 100% !important;
-    overflow-x: hidden;
+/* Headings */
+h1, h2, h3 {
+    color: #0ff !important;
+    font-weight: 700 !important;
+}
+
+/* Paragraphs and text */
+p, label {
+    font-size: 1rem !important;
+    color: #fff !important;
+}
+
+/* Inputs & buttons */
+input, textarea, select {
+    border-radius: 8px;
+    padding: 0.6rem;
+    border: none;
+    font-size: 1rem !important;
+}
+.stButton button {
+    background: #0ff;
+    color: black;
+    border-radius: 10px;
+    padding: 0.6rem 1.2rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.stButton button:hover {
+    background: #00cccc;
+    color: white;
 }
 
 /* Service cards */
@@ -44,7 +69,7 @@ body, .main, .block-container {
     box-shadow: 0 0 30px rgba(0, 191, 255, 0.5);
 }
 
-/* FAB (AstroBot button) */
+/* Floating AstroBot button */
 .fab {
     position: fixed;
     bottom: 2rem;
@@ -59,36 +84,37 @@ body, .main, .block-container {
     font-weight: bold;
 }
 
-/* Mobile adjustments */
+/* Mobile responsive tweaks */
 @media (max-width: 768px) {
     h1, h2, h3 { font-size: 1.2rem !important; }
-    .stButton button { font-size: 0.9rem !important; padding: 0.6rem 1rem; }
+    .stButton button { font-size: 0.9rem !important; padding: 0.5rem 1rem; }
     input, textarea, select { font-size: 0.9rem !important; }
     .fab { bottom: 1rem !important; right: 1rem !important; transform: scale(0.85); }
 }
 </style>
 """, unsafe_allow_html=True)
 
-# ------------------------------------------------
-# HEADER
-# ------------------------------------------------
-st.title("🚀 ASTROTECH")
-st.subheader("Fixing your digital universe 🌌")
+# ---------------------------
+# Header
+# ---------------------------
+st.markdown("<h1 style='text-align: center;'>🚀 Welcome to ASTROTECH 🌌</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Your one-stop solution for fixing accounts, mobile phones & more.</p>", unsafe_allow_html=True)
 
-# ------------------------------------------------
-# SERVICES GRID
-# ------------------------------------------------
+# ---------------------------
+# Services Section
+# ---------------------------
+st.subheader("🔧 Our Services")
+
 services = {
-    "📱 Phone Repairs": "We fix broken screens, battery issues, and more.",
-    "📧 Gmail Recovery": "Lost access? We’ll help you recover your Gmail.",
-    "🌐 Social Media Fixes": "Recover hacked or locked accounts.",
-    "💻 Other Tech Support": "General troubleshooting for gadgets & devices."
+    "🔑 Social Media Account Recovery": "Get back into your locked or hacked accounts.",
+    "📧 Gmail & Email Fix": "Resolve login, recovery, and setup issues quickly.",
+    "📱 Mobile Phone Repair": "From software issues to setup assistance.",
+    "🛠 Other Tech Support": "General fixes for your digital life."
 }
 
-cols = st.columns(2)  # switch to 2 columns for better mobile scaling
-
-for idx, (title, desc) in enumerate(services.items()):
-    with cols[idx % 2]:
+cols = st.columns(2)  # two columns for desktop, collapses on mobile
+for index, (title, desc) in enumerate(services.items()):
+    with cols[index % 2]:
         st.markdown(f"""
         <div class="service-card">
             <h3>{title}</h3>
@@ -96,28 +122,25 @@ for idx, (title, desc) in enumerate(services.items()):
         </div>
         """, unsafe_allow_html=True)
 
-# ------------------------------------------------
-# SERVICE REQUEST FORM
-# ------------------------------------------------
-st.header("📝 Request a Service")
+# ---------------------------
+# Contact Form
+# ---------------------------
+st.subheader("📩 Contact Us")
 
-with st.form("service_form"):
+with st.form("contact_form", clear_on_submit=True):
     name = st.text_input("Your Name")
-    service_type = st.selectbox("Choose Service", list(services.keys()))
-    details = st.text_area("Describe the issue")
-    submitted = st.form_submit_button("Submit Request")
+    email = st.text_input("Your Email")
+    issue = st.text_area("Describe Your Issue")
+    submitted = st.form_submit_button("Send Message")
+    if submitted:
+        if name and email and issue:
+            st.success("✅ Thank you! We'll get back to you soon.")
+        else:
+            st.error("⚠️ Please fill out all fields.")
 
-if submitted:
-    with open("data/requests.csv", "a") as f:
-        f.write(f"{name},{service_type},{details},{datetime.now()}\n")
-    st.success("✅ Your request has been submitted! We'll contact you soon.")
-
-# ------------------------------------------------
-# ASTROBOT FAB (Floating Button)
-# ------------------------------------------------
-st.markdown('<div class="fab">🤖</div>', unsafe_allow_html=True)
-
-with st.expander("🤖 Chat with AstroBot"):
-    user_input = st.text_input("Ask me anything about ASTROTECH:")
-    if user_input:
-        st.info(f"AstroBot: I hear you! You asked about '{user_input}'. Our team will get back to you 🚀")
+# ---------------------------
+# Floating AstroBot Button
+# ---------------------------
+st.markdown("""
+<div class="fab">🤖</div>
+""", unsafe_allow_html=True)
